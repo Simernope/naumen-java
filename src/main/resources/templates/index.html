@@ -17,6 +17,11 @@
     <h1>Приложение Todo List на Spring Boot</h1>
     <hr />
 
+    <!-- Добавляем ссылку для выхода из системы -->
+    <div class="text-end">
+        <a class="btn btn-outline-danger" th:href="@{/logout}">Выйти</a>
+    </div>
+
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
