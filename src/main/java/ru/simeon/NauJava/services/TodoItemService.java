@@ -6,6 +6,7 @@ import ru.simeon.NauJava.models.TodoItem;
 import ru.simeon.NauJava.repositories.TodoItemRepository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,10 @@ public class TodoItemService {
 
     public void delete(TodoItem todoItem) {
         todoItemRepository.delete(todoItem);
+    }
+
+    public List<TodoItem> getAllItems() {
+        return todoItemRepository.findAll();
     }
 
 }

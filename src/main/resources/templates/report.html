@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Отчет статистики</title>
+</head>
+<body>
+<h1>Отчет статистики</h1>
+
+<p>Количество пользователей: <span th:text="${report.userCount}">0</span></p>
+<p>Время на подсчет пользователей: <span th:text="${report.userCountTime}">0</span> ms</p>
+
+<h2>Список задач:</h2>
+<p>Время на получение списка задач: <span th:text="${report.todoItemsTime}">0</span> ms</p>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Описание</th>
+        <th>Статус</th>
+        <th>Создано</th>
+        <th>Обновлено</th>
+    </tr>
+    <tr th:each="item : ${report.todoItems}">
+        <td th:text="${item.id}">ID</td>
+        <td th:text="${item.description}">Описание</td>
+        <td th:text="${item.isComplete ? 'Завершено' : 'Не завершено'}">Статус</td>
+        <td th:text="${item.createdAt}">Дата создания</td>
+        <td th:text="${item.updatedAt}">Дата обновления</td>
+    </tr>
+</table>
+
+<p>Общее время формирования отчета: <span th:text="${report.totalTime}">0</span> ms</p>
+</body>
+</html>

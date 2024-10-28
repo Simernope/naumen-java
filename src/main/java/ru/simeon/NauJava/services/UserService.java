@@ -52,4 +52,8 @@ public class UserService implements UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .collect(Collectors.toList());
     }
+
+    public long countUsers() {
+        return userRepository.count();
+    }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Список отчетов</title>
+</head>
+<body>
+<h1>Список отчетов</h1>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Статус</th>
+        <th>Количество пользователей</th>
+        <th>Общее время формирования (мс)</th>
+        <th>todoItemsTime</th>
+        <th>userCountTime</th>
+    </tr>
+    <tr th:each="report : ${reports}">
+        <td th:text="${report.id}">ID</td>
+        <td th:text="${report.status}">Статус</td>
+        <td th:text="${report.userCount}">Количество пользователей</td>
+        <td th:text="${report.totalTime}">Время формирования</td>
+        <td th:text="${report.todoItemsTime}">Время формирования todoItemsTime</td>
+        <td th:text="${report.userCountTime}">Время формирования userCountTime</td>
+    </tr>
+</table>
+
+</body>
+</html>
