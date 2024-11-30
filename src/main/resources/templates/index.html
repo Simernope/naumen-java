@@ -9,56 +9,178 @@
         .naumen-logo {
             color: #ff7700;
         }
+        /* Стиль для активных кнопок */
+        .btn-group .btn.active {
+            /* Убираем outline-стилизацию для активных кнопок */
+            color: white;
+        }
     </style>
+    <title>Приложение Todo List</title>
 </head>
 <body>
 <div class="container">
-    <h1 class="naumen-logo">Naumen course</h1>
-    <h1>Приложение Todo List на Spring Boot</h1>
+    <div class="row mt-4">
+        <!-- Логотип и заголовок -->
+        <div class="col-md-8">
+            <h1 class="naumen-logo">Naumen course</h1>
+            <h2>Приложение Todo List</h2>
+        </div>
+        <!-- Кнопка выхода -->
+        <div class="col-md-4 text-end">
+            <a class="btn btn-outline-danger" href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">
+                Выйти
+            </a>
+            <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
+        </div>
+    </div>
     <hr />
 
-    <!-- Добавляем ссылку для выхода из системы -->
-    <div class="text-end">
-        <a class="btn btn-outline-danger" th:href="@{/logout}">Выйти</a>
+    <!-- Элементы фильтрации -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="btn-group" role="group" aria-label="Фильтр задач">
+                <button type="button" class="btn btn-outline-primary" id="filter-all" onclick="filterTasks('all')">Все</button>
+                <button type="button" class="btn btn-outline-success" id="filter-complete" onclick="filterTasks('complete')">Выполненные</button>
+                <button type="button" class="btn btn-outline-warning" id="filter-incomplete" onclick="filterTasks('incomplete')">Невыполненные</button>
+            </div>
+        </div>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Действия</th>
-            <th>Id</th>
-            <th>Описание</th>
-            <th>Завершено</th>
-            <th>Создано</th>
-            <th>Обновлено</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${todoItems}" th:class="${item.isComplete} ? 'alert alert-success' : 'alert alert-warning'">
-            <td>
-                <div class="btn btn-group-sm" role="group">
-                    <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">
-                        <i class="bi bi-pencil-fill"></i> Редактировать</a>
-                    <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">
-                        <i class="bi bi-trash-fill"></i> Удалить</a>
-                </div>
-            </td>
-            <td th:text="${item.id}"></td>
-            <td th:text="${item.description}"></td>
-            <td>
-                <span th:if="${item.isComplete} == true" th:text="'Да'" />
-                <span th:unless="${item.isComplete} == true" th:text="'Нет'" />
-            </td>
-            <td th:text="${item.createdAt}"></td>
-            <td th:text="${item.updatedAt}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <!-- Таблица задач -->
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered table-striped" id="tasksTable">
+                <thead>
+                <tr>
+                    <th>Действия</th>
+                    <th>Id</th>
+                    <th>Описание</th>
+                    <th>Завершено</th>
+                    <th>Создано</th>
+                    <th>Обновлено</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${todoItems}"
+                    th:class="${item.isComplete} ? 'alert alert-success' : 'alert alert-warning'"
+                    th:data-complete="${item.isComplete}">
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">
+                                <i class="bi bi-pencil-fill"></i> Редактировать</a>
+                            <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">
+                                <i class="bi bi-trash-fill"></i> Удалить</a>
+                        </div>
+                    </td>
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.description}"></td>
+                    <td>
+                        <span th:if="${item.isComplete}" th:text="'Да'"></span>
+                        <span th:unless="${item.isComplete}" th:text="'Нет'"></span>
+                    </td>
+                    <td th:text="${item.createdAt}"></td>
+                    <td th:text="${item.updatedAt}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <p><a class="btn btn-outline-success" href="/create-todo">
-        <i class="bi bi-plus-square-fill"></i> Создать задачу</a>
-    </p>
+    <!-- Кнопка создания задачи -->
+    <div class="row mt-3">
+        <div class="col-12 text-end">
+            <a class="btn btn-outline-success" th:href="@{/create-todo}">
+                <i class="bi bi-plus-square-fill"></i> Создать задачу
+            </a>
+        </div>
+    </div>
 </div>
 <script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>
+<script>
+    /**
+     * Функция для фильтрации задач
+     * @param {string} filter - Тип фильтра ('all', 'complete', 'incomplete')
+     */
+    function filterTasks(filter) {
+        const table = document.getElementById('tasksTable');
+        const tbody = table.getElementsByTagName('tbody')[0];
+        const rows = tbody.getElementsByTagName('tr');
+
+        // Сброс активных классов на всех кнопках
+        document.getElementById('filter-all').classList.remove('active');
+        document.getElementById('filter-complete').classList.remove('active');
+        document.getElementById('filter-incomplete').classList.remove('active');
+
+        // Установка активного класса для выбранного фильтра и изменение стиля кнопки
+        switch (filter) {
+            case 'all':
+                setActiveButton('filter-all');
+                break;
+            case 'complete':
+                setActiveButton('filter-complete');
+                break;
+            case 'incomplete':
+                setActiveButton('filter-incomplete');
+                break;
+        }
+
+        for (let row of rows) {
+            const isComplete = row.getAttribute('data-complete') === 'true';
+
+            if (filter === 'all') {
+                row.style.display = '';
+            } else if (filter === 'complete' && isComplete) {
+                row.style.display = '';
+            } else if (filter === 'incomplete' && !isComplete) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
+    /**
+     * Функция для установки активного состояния кнопки
+     * @param {string} buttonId - Идентификатор кнопки
+     */
+    function setActiveButton(buttonId) {
+        const buttons = ['filter-all', 'filter-complete', 'filter-incomplete'];
+        buttons.forEach(id => {
+            const button = document.getElementById(id);
+            if (id === buttonId) {
+                // Заменяем outline-класс на заполненный класс
+                if (id === 'filter-all') {
+                    button.classList.remove('btn-outline-primary');
+                    button.classList.add('btn-primary');
+                } else if (id === 'filter-complete') {
+                    button.classList.remove('btn-outline-success');
+                    button.classList.add('btn-success');
+                } else if (id === 'filter-incomplete') {
+                    button.classList.remove('btn-outline-warning');
+                    button.classList.add('btn-warning');
+                }
+                button.classList.add('active');
+            } else {
+                // Возвращаем outline-класс для неактивных кнопок
+                if (id === 'filter-all') {
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-outline-primary');
+                } else if (id === 'filter-complete') {
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-outline-success');
+                } else if (id === 'filter-incomplete') {
+                    button.classList.remove('btn-warning');
+                    button.classList.add('btn-outline-warning');
+                }
+                button.classList.remove('active');
+            }
+        });
+    }
+
+    // Инициализация: отображать все задачи и установить кнопку "Все" как активную
+    document.addEventListener('DOMContentLoaded', function() {
+        filterTasks('all');
+    });
+</script>
 </body>
 </html>

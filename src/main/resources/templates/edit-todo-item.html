@@ -5,51 +5,52 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}" />
+    <title>Редактировать задачу</title>
 </head>
 <body>
 <div class="container">
     <div class="row mt-5">
-        <div class="col-2">
-            <p><a class="btn btn-outline-success" href="/">
-                <i class="bi bi-arrow-left-square-fill"></i> Назад</a>
-            </p>
+        <!-- Левая колонка с кнопкой назад -->
+        <div class="col-md-2">
+            <a class="btn btn-outline-success" th:href="@{/}">
+                <i class="bi bi-arrow-left-square-fill"></i> Назад
+            </a>
         </div>
-        <div class="col-6">
+
+        <!-- Правая колонка с формой редактирования -->
+        <div class="col-md-8">
             <h2>Редактировать задачу</h2>
-            <form class="row g-3" action="#" th:action="@{/todo/{id}(id=${todo.id})}" th:object="${todo}" method="POST">
-                <div class="form-group">
-                    <div class="col-6">
-                        <label for="description">Описание</label>
-                        <input class="form-control"
-                               type="text"
-                               th:field="*{description}"
-                               id="description"
-                               placeholder="Описание"
-                        >
-                    </div>
-                    <div class="col-6 form-check">
-                        <input class="form-check-input"
-                               type="checkbox"
-                               id="inputIsComplete"
-                               th:field="*{isComplete}"
-                               th:checked="${isComplete} == true">
-                        <label class="form-check-label" for="inputIsComplete">
-                            Завершено?
-                        </label>
-                    </div>
-
-                    <input type="hidden" th:field="*{createdAt}" />
-                    <input type="hidden" th:field="*{updatedAt}" />
-
-                    <button type="submit" class="btn btn-outline-success">
-                        <i class="bi bi-plus-square-fill"></i> Обновить
-                    </button>
-
+            <form class="row g-3" th:action="@{/todo/{id}(id=${todo.id})}" th:object="${todo}" method="POST">
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание</label>
+                    <input class="form-control"
+                           type="text"
+                           th:field="*{description}"
+                           id="description"
+                           placeholder="Описание"
+                    >
                 </div>
+                <div class="mb-3 form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="inputIsComplete"
+                           th:field="*{isComplete}"
+                           th:checked="${isComplete} == true">
+                    <label class="form-check-label" for="inputIsComplete">
+                        Завершено?
+                    </label>
+                </div>
+
+                <!-- Скрытые поля -->
+                <input type="hidden" th:field="*{createdAt}" />
+                <input type="hidden" th:field="*{updatedAt}" />
+
+                <button type="submit" class="btn btn-outline-success">
+                    <i class="bi bi-plus-square-fill"></i> Обновить
+                </button>
             </form>
         </div>
     </div>
-
 </div>
 <script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>
 </body>

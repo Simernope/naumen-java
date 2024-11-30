@@ -10,32 +10,28 @@
             color: #ff7700;
         }
     </style>
-    <title>Регистрация</title>
+    <title>Авторизация</title>
 </head>
 <body>
 <div class="container">
     <h1 class="naumen-logo">Naumen course</h1>
-    <h2>Регистрация</h2>
+    <h2>Авторизация</h2>
     <hr />
 
-    <div th:if="${message}" class="alert alert-info" role="alert">
-        <span th:text="${message}"></span>
-    </div>
-
-    <form th:action="@{/registration}" method="post" class="mt-4">
+    <form th:action="@{/login}" method="post" class="mt-4">
         <div class="mb-3">
             <label for="username" class="form-label">Имя пользователя:</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Введите имя пользователя" required/>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Введите имя пользователя" required />
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Пароль:</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Введите пароль" required/>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Введите пароль" required />
         </div>
         <div class="mb-3">
-            <input type="submit" class="btn btn-primary" value="Зарегистрироваться"/>
+            <input type="submit" class="btn btn-primary" value="Войти" />
         </div>
     </form>
-    <p>Есть аккаунт? <a th:href="@{/login}">Авторизуйтесь</a>.</p>
+    <p>Нет аккаунта? <a th:href="@{/registration}">Зарегистрируйтесь</a>.</p>
 </div>
 <script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>
 </body>
